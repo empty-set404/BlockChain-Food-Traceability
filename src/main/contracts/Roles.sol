@@ -1,0 +1,24 @@
+pragma solidity ^0.4.25;
+
+library Roles {
+
+    struct Role {
+        //使用 map 的好处就不用使用数组，因为使用数组需要遍历数组的需要遍历寻找
+        mapping (address => bool) bearer;
+    }
+
+    function add(Role storage role, address account) internal {
+        require(!has(role, account), "Roles: account already has role");
+        role.bearer[account] = true;
+    }
+
+    function remove(Role storage role, address account) internal {
+        require(has(role, account), "Roles: account does not have role");
+        role.bearer[account] = false;
+    }
+
+    function has(Role storage role, address account) internal view returns (bool) {
+        require(account != address(0), "Roles: account is the zero address");
+        return role.bearer[account];
+    }
+}
